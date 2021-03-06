@@ -1,0 +1,61 @@
+#!/usr/bin/env awk -f
+
+BEGIN {
+  sym_prefix = ""
+  split("\
+        jet_aligned_alloc \
+        jet_calloc \
+        jet_dallocx \
+        jet_free \
+        jet_free_sized \
+        jet_free_aligned_sized \
+        jet_mallctl \
+        jet_mallctlbymib \
+        jet_mallctlnametomib \
+        jet_malloc \
+        jet_malloc_conf \
+        jet_malloc_conf_2_conf_harder \
+        jet_malloc_message \
+        jet_malloc_stats_print \
+        jet_malloc_usable_size \
+        jet_mallocx \
+        jet_smallocx_ed2ff69fc6e6e6150631ae07bbbf57eb96de5d0c \
+        jet_nallocx \
+        jet_posix_memalign \
+        jet_rallocx \
+        jet_realloc \
+        jet_sallocx \
+        jet_sdallocx \
+        jet_xallocx \
+        tls_callback \
+        ", exported_symbol_names)
+  # Store exported symbol names as keys in exported_symbols.
+  for (i in exported_symbol_names) {
+    exported_symbols[exported_symbol_names[i]] = 1
+  }
+}
+
+# Process 'nm -P -t d <c_source.o>' output.  GNU nm omits a trailing size
+# field when the ELF symbol size is zero, so accept both three and four fields.
+#
+# Handle lines like:
+#   opt_junk D 8 1
+#   tsd_tls L 0 1920
+#   prof_active_get T 0
+((NF == 3 || NF == 4) &&
+ $2 ~ /^[ABCDGLNRSTVW]$/ &&
+ !($1 in exported_symbols) &&
+ $1 ~ /^[A-Za-z_][A-Za-z0-9_]*$/ &&
+ $3 ~ /^[0-9]+$/) {
+  print substr($1, 1+length(sym_prefix), length($1)-length(sym_prefix))
+  next
+}
+
+# Process 'dumpbin /SYMBOLS <c_source.obj>' output.
+#
+# Handle lines like:
+#   353 00008098 SECT4  notype       External     | opt_junk
+#   3F1 00000000 SECT7  notype ()    External     | malloc_initialized
+($3 ~ /^SECT[0-9]+/ && $(NF-2) == "External" && !($NF in exported_symbols)) {
+  print $NF
+}
