@@ -10,10 +10,16 @@ c_flags += [
 ]
 
 incdirs = ['include']
+c_flags += ['-D_REENTRANT']
 
 if target_machine.system() == 'windows'
     incdirs += ['mingw/include']
     c_flags += ['-D_WIN32']
+endif
+
+if target_machine.system() == 'linux'
+    incdirs += ['linux/include']
+    c_flags += ['-D_GNU_SOURCE']
 endif
 
 sources = [
