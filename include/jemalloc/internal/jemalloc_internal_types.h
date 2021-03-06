@@ -114,7 +114,7 @@ typedef void(write_cb_t)(void *, const char *);
 	        - ((uintptr_t)(a)))))
 
 /* Declare a variable-length array. */
-#if __STDC_VERSION__ < 199901L || defined(__STDC_NO_VLA__)
+#if (defined(_MSC_VER) || __STDC_VERSION__ < 199901L) || defined(__STDC_NO_VLA__)
 #	ifdef _MSC_VER
 #		include <malloc.h>
 #		define alloca _alloca
