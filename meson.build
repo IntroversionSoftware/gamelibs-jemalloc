@@ -1,4 +1,4 @@
-project('jemalloc', 'c', version: '5.2.1')
+project('jemalloc', 'c', version: '5.2.1', default_options: ['c_std=c11'])
 
 compiler = meson.get_compiler('c')
 link_deps = []
@@ -20,6 +20,10 @@ endif
 if target_machine.system() == 'linux'
     incdirs += ['linux/include']
     c_flags += ['-D_GNU_SOURCE']
+endif
+
+if target_machine.system() == 'darwin'
+    incdirs += ['macosx/include']
 endif
 
 sources = [
