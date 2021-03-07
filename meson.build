@@ -6,6 +6,7 @@ c_flags = ['-DJEMALLOC_NO_PRIVATE_NAMESPACE']
 
 c_flags += [
     compiler.first_supported_argument('-Wno-missing-braces'),
+    compiler.first_supported_argument('-Wno-ignored-attributes'),
 ]
 
 incdirs = ['include']
