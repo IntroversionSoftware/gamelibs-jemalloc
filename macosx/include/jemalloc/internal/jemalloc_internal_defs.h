@@ -33,7 +33,11 @@
  * Hyper-threaded CPUs may need a special instruction inside spin loops in
  * order to yield to another virtual CPU.
  */
+#ifdef __aarch64__
 #define CPU_SPINWAIT __asm__ volatile("yield")
+#else
+#define CPU_SPINWAIT __asm__ volatile("pause")
+#endif
 /* 1 if CPU_SPINWAIT is defined, 0 otherwise. */
 #define HAVE_CPU_SPINWAIT 1
 
