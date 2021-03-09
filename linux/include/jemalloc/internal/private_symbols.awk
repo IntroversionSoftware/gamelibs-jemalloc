@@ -17,7 +17,7 @@ BEGIN {
         malloc_stats_print \
         malloc_usable_size \
         mallocx \
-        smallocx_000000missin \
+        smallocx_9031c232c6c35bb351c3deb8dbccc6c1cd756645 \
         nallocx \
         posix_memalign \
         rallocx \

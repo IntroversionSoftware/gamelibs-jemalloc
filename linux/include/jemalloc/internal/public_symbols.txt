@@ -12,7 +12,7 @@ malloc_message:malloc_message
 malloc_stats_print:malloc_stats_print
 malloc_usable_size:malloc_usable_size
 mallocx:mallocx
-smallocx_000000missin:smallocx_000000missin
+smallocx_9031c232c6c35bb351c3deb8dbccc6c1cd756645:smallocx_9031c232c6c35bb351c3deb8dbccc6c1cd756645
 nallocx:nallocx
 posix_memalign:posix_memalign
 rallocx:rallocx
