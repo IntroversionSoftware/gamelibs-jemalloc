@@ -61,7 +61,6 @@ sources = [
     'src/log.c',
     'src/malloc_io.c',
     'src/mutex.c',
-    'src/mutex_pool.c',
     'src/nstime.c',
     'src/pa.c',
     'src/pa_extra.c',
