@@ -35,7 +35,9 @@
  */
 #define CPU_SPINWAIT _mm_pause()
 /* 1 if CPU_SPINWAIT is defined, 0 otherwise. */
+#if !defined(_M_ARM) && !defined(_M_ARM64)
 #define HAVE_CPU_SPINWAIT 1
+#endif
 
 /*
  * Number of significant bits in virtual addresses.  This may be less than the
