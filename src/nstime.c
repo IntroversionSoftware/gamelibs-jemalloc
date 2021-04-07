@@ -160,15 +160,25 @@ nstime_divide(const nstime_t *time, const nstime_t *divisor) {
 
 #ifdef _WIN32
 #  define NSTIME_MONOTONIC true
+static LARGE_INTEGER qpc_frequency = {0};
+static LARGE_INTEGER qpc_base = {0};
+
 static void
 nstime_get(nstime_t *time) {
-	FILETIME ft;
-	uint64_t ticks_100ns;
+	LARGE_INTEGER qpc;
+	if (qpc_frequency.QuadPart == 0) {
+        QueryPerformanceFrequency(&qpc_frequency);
+		QueryPerformanceCounter(&qpc_base);
+        assert(qpc_frequency.QuadPart != 0);
+	}
+	QueryPerformanceCounter(&qpc);
+	
+	qpc.QuadPart -= qpc_base.QuadPart;
 
-	GetSystemTimeAsFileTime(&ft);
-	ticks_100ns = (((uint64_t)ft.dwHighDateTime) << 32) | ft.dwLowDateTime;
+	// convert to 100ns before dividing by frequency
+	qpc.QuadPart *= 10000000ULL;
 
-	nstime_init(time, ticks_100ns * 100);
+	nstime_init(time, (qpc.QuadPart / qpc_frequency.QuadPart) * 100ULL);
 }
 #elif defined(JEMALLOC_HAVE_CLOCK_MONOTONIC_COARSE)
 #  define NSTIME_MONOTONIC true
