@@ -17,7 +17,7 @@ BEGIN {
         _jet_malloc_stats_print \
         _jet_malloc_usable_size \
         _jet_mallocx \
-        _jet_smallocx_000000missin \
+        _jet_smallocx_4bd347f8c17f3075c535ef61571801221bc91be8 \
         _jet_nallocx \
         _jet_posix_memalign \
         _jet_rallocx \
