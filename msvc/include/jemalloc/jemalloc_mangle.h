@@ -23,7 +23,7 @@
 #  define malloc_stats_print je_malloc_stats_print
 #  define malloc_usable_size je_malloc_usable_size
 #  define mallocx je_mallocx
-#  define smallocx_31e51993bd9b6a34fd8f71e7a67db4f645b6e2c3 je_smallocx_31e51993bd9b6a34fd8f71e7a67db4f645b6e2c3
+#  define smallocx_4bd347f8c17f3075c535ef61571801221bc91be8 je_smallocx_4bd347f8c17f3075c535ef61571801221bc91be8
 #  define nallocx je_nallocx
 #  define posix_memalign je_posix_memalign
 #  define rallocx je_rallocx
@@ -55,7 +55,7 @@
 #  undef je_malloc_stats_print
 #  undef je_malloc_usable_size
 #  undef je_mallocx
-#  undef je_smallocx_31e51993bd9b6a34fd8f71e7a67db4f645b6e2c3
+#  undef je_smallocx_4bd347f8c17f3075c535ef61571801221bc91be8
 #  undef je_nallocx
 #  undef je_posix_memalign
 #  undef je_rallocx

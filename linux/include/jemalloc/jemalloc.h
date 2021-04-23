@@ -65,30 +65,30 @@ extern "C" {
  * these macro definitions.
  */
 #ifndef JEMALLOC_NO_RENAME
-#  define je_aligned_alloc aligned_alloc
-#  define je_calloc calloc
-#  define je_dallocx dallocx
-#  define je_free free
-#  define je_mallctl mallctl
-#  define je_mallctlbymib mallctlbymib
-#  define je_mallctlnametomib mallctlnametomib
-#  define je_malloc malloc
-#  define je_malloc_conf malloc_conf
-#  define je_malloc_conf_2_conf_harder malloc_conf_2_conf_harder
-#  define je_malloc_message malloc_message
-#  define je_malloc_stats_print malloc_stats_print
-#  define je_malloc_usable_size malloc_usable_size
-#  define je_mallocx mallocx
-#  define je_smallocx_f98a6f930490f4ca288be9af3719de1305d9c827 smallocx_f98a6f930490f4ca288be9af3719de1305d9c827
-#  define je_nallocx nallocx
-#  define je_posix_memalign posix_memalign
-#  define je_rallocx rallocx
-#  define je_realloc realloc
-#  define je_sallocx sallocx
-#  define je_sdallocx sdallocx
-#  define je_xallocx xallocx
-#  define je_memalign memalign
-#  define je_valloc valloc
+#  define je_aligned_alloc je_aligned_alloc
+#  define je_calloc je_calloc
+#  define je_dallocx je_dallocx
+#  define je_free je_free
+#  define je_mallctl je_mallctl
+#  define je_mallctlbymib je_mallctlbymib
+#  define je_mallctlnametomib je_mallctlnametomib
+#  define je_malloc je_malloc
+#  define je_malloc_conf je_malloc_conf
+#  define je_malloc_conf_2_conf_harder je_malloc_conf_2_conf_harder
+#  define je_malloc_message je_malloc_message
+#  define je_malloc_stats_print je_malloc_stats_print
+#  define je_malloc_usable_size je_malloc_usable_size
+#  define je_mallocx je_mallocx
+#  define je_smallocx_2f2332e0cd062443ae7e713ac40c85529b3411d2 je_smallocx_2f2332e0cd062443ae7e713ac40c85529b3411d2
+#  define je_nallocx je_nallocx
+#  define je_posix_memalign je_posix_memalign
+#  define je_rallocx je_rallocx
+#  define je_realloc je_realloc
+#  define je_sallocx je_sallocx
+#  define je_sdallocx je_sdallocx
+#  define je_xallocx je_xallocx
+#  define je_memalign je_memalign
+#  define je_valloc je_valloc
 #endif
 
 #include <stdlib.h>
@@ -97,13 +97,13 @@ extern "C" {
 #include <limits.h>
 #include <strings.h>
 
-#define JEMALLOC_VERSION "5.2.1-746-gf98a6f930490f4ca288be9af3719de1305d9c827"
+#define JEMALLOC_VERSION "5.2.1-749-g2f2332e0cd062443ae7e713ac40c85529b3411d2"
 #define JEMALLOC_VERSION_MAJOR 5
 #define JEMALLOC_VERSION_MINOR 2
 #define JEMALLOC_VERSION_BUGFIX 1
-#define JEMALLOC_VERSION_NREV 746
-#define JEMALLOC_VERSION_GID "f98a6f930490f4ca288be9af3719de1305d9c827"
-#define JEMALLOC_VERSION_GID_IDENT f98a6f930490f4ca288be9af3719de1305d9c827
+#define JEMALLOC_VERSION_NREV 749
+#define JEMALLOC_VERSION_GID "2f2332e0cd062443ae7e713ac40c85529b3411d2"
+#define JEMALLOC_VERSION_GID_IDENT 2f2332e0cd062443ae7e713ac40c85529b3411d2
 
 #define MALLOCX_LG_ALIGN(la)	((int)(la))
 #if LG_SIZEOF_PTR == 2
@@ -412,7 +412,7 @@ struct extent_hooks_s {
 #  define malloc_stats_print je_malloc_stats_print
 #  define malloc_usable_size je_malloc_usable_size
 #  define mallocx je_mallocx
-#  define smallocx_f98a6f930490f4ca288be9af3719de1305d9c827 je_smallocx_f98a6f930490f4ca288be9af3719de1305d9c827
+#  define smallocx_2f2332e0cd062443ae7e713ac40c85529b3411d2 je_smallocx_2f2332e0cd062443ae7e713ac40c85529b3411d2
 #  define nallocx je_nallocx
 #  define posix_memalign je_posix_memalign
 #  define rallocx je_rallocx
@@ -446,7 +446,7 @@ struct extent_hooks_s {
 #  undef je_malloc_stats_print
 #  undef je_malloc_usable_size
 #  undef je_mallocx
-#  undef je_smallocx_f98a6f930490f4ca288be9af3719de1305d9c827
+#  undef je_smallocx_2f2332e0cd062443ae7e713ac40c85529b3411d2
 #  undef je_nallocx
 #  undef je_posix_memalign
 #  undef je_rallocx

@@ -79,7 +79,7 @@ extern "C" {
 #  define je_malloc_stats_print je_malloc_stats_print
 #  define je_malloc_usable_size je_malloc_usable_size
 #  define je_mallocx je_mallocx
-#  define je_smallocx_000000missin je_smallocx_000000missin
+#  define je_smallocx_4bd347f8c17f3075c535ef61571801221bc91be8 je_smallocx_4bd347f8c17f3075c535ef61571801221bc91be8
 #  define je_nallocx je_nallocx
 #  define je_posix_memalign je_posix_memalign
 #  define je_rallocx je_rallocx
@@ -96,13 +96,13 @@ extern "C" {
 #include <limits.h>
 #include <strings.h>
 
-#define JEMALLOC_VERSION "0.0.0-0-g000000missing_version_try_git_fetch_tags"
-#define JEMALLOC_VERSION_MAJOR 0
-#define JEMALLOC_VERSION_MINOR 0
-#define JEMALLOC_VERSION_BUGFIX 0
-#define JEMALLOC_VERSION_NREV 0
-#define JEMALLOC_VERSION_GID "000000missin"
-#define JEMALLOC_VERSION_GID_IDENT 000000missin
+#define JEMALLOC_VERSION "5.2.1-748-g4bd347f8c17f3075c535ef61571801221bc91be8"
+#define JEMALLOC_VERSION_MAJOR 5
+#define JEMALLOC_VERSION_MINOR 2
+#define JEMALLOC_VERSION_BUGFIX 1
+#define JEMALLOC_VERSION_NREV 748
+#define JEMALLOC_VERSION_GID "4bd347f8c17f3075c535ef61571801221bc91be8"
+#define JEMALLOC_VERSION_GID_IDENT 4bd347f8c17f3075c535ef61571801221bc91be8
 
 #define MALLOCX_LG_ALIGN(la)	((int)(la))
 #if LG_SIZEOF_PTR == 2
@@ -411,7 +411,7 @@ struct extent_hooks_s {
 #  define malloc_stats_print je_malloc_stats_print
 #  define malloc_usable_size je_malloc_usable_size
 #  define mallocx je_mallocx
-#  define smallocx_000000missin je_smallocx_000000missin
+#  define smallocx_4bd347f8c17f3075c535ef61571801221bc91be8 je_smallocx_4bd347f8c17f3075c535ef61571801221bc91be8
 #  define nallocx je_nallocx
 #  define posix_memalign je_posix_memalign
 #  define rallocx je_rallocx
@@ -444,7 +444,7 @@ struct extent_hooks_s {
 #  undef je_malloc_stats_print
 #  undef je_malloc_usable_size
 #  undef je_mallocx
-#  undef je_smallocx_000000missin
+#  undef je_smallocx_4bd347f8c17f3075c535ef61571801221bc91be8
 #  undef je_nallocx
 #  undef je_posix_memalign
 #  undef je_rallocx

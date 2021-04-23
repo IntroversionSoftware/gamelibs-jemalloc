@@ -386,7 +386,7 @@
  * If defined, jemalloc symbols are not exported (doesn't work when
  * JEMALLOC_PREFIX is not defined).
  */
-/* #undef JEMALLOC_EXPORT */
+#define JEMALLOC_EXPORT /**/
 
 /* config.malloc_conf options string. */
 #define JEMALLOC_CONFIG_MALLOC_CONF ""
