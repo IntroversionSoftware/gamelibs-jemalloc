@@ -17,7 +17,7 @@ BEGIN {
         _je_malloc_stats_print \
         _je_malloc_usable_size \
         _je_mallocx \
-        _je_smallocx_000000missin \
+        _je_smallocx_4bd347f8c17f3075c535ef61571801221bc91be8 \
         _je_nallocx \
         _je_posix_memalign \
         _je_rallocx \
