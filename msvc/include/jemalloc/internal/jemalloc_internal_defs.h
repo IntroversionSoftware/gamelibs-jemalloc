@@ -6,8 +6,8 @@
  * public APIs to be prefixed.  This makes it possible, with some care, to use
  * multiple allocators simultaneously.
  */
-#define JEMALLOC_PREFIX "je_"
-#define JEMALLOC_CPREFIX "JE_"
+/* #undef JEMALLOC_PREFIX */
+/* #undef JEMALLOC_CPREFIX */
 
 /*
  * Define overrides for non-standard allocator-related functions if they are
@@ -35,9 +35,7 @@
  */
 #define CPU_SPINWAIT _mm_pause()
 /* 1 if CPU_SPINWAIT is defined, 0 otherwise. */
-#if !defined(_M_ARM) && !defined(_M_ARM64)
 #define HAVE_CPU_SPINWAIT 1
-#endif
 
 /*
  * Number of significant bits in virtual addresses.  This may be less than the
@@ -388,13 +386,12 @@
  * If defined, jemalloc symbols are not exported (doesn't work when
  * JEMALLOC_PREFIX is not defined).
  */
-/* #undef JEMALLOC_EXPORT */
 
 /* config.malloc_conf options string. */
 #define JEMALLOC_CONFIG_MALLOC_CONF ""
 
 /* If defined, jemalloc takes the malloc/free/etc. symbol names. */
-/* #undef JEMALLOC_IS_MALLOC */
+#define JEMALLOC_IS_MALLOC 1
 
 /*
  * Defined if strerror_r returns char * if _GNU_SOURCE is defined.
