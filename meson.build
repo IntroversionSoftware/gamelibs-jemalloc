@@ -2,7 +2,7 @@ project('jemalloc', 'c', version: '5.2.1', default_options: ['c_std=c11'])
 
 compiler = meson.get_compiler('c')
 link_deps = []
-c_flags = ['-DJEMALLOC_NO_PRIVATE_NAMESPACE', '-DJEMALLOC_NO_RENAME']
+c_flags = ['-DJEMALLOC_NO_PRIVATE_NAMESPACE']
 
 c_flags += [
     compiler.first_supported_argument('-Wno-missing-braces'),
