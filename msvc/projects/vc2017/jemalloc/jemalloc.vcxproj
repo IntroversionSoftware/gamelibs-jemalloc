@@ -420,7 +420,7 @@
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <PreprocessorDefinitions>_REENTRANT;_WINDLL;DLLEXPORT;JEMALLOC_DEBUG;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>JEMALLOC_NO_PRIVATE_NAMESPACE;_REENTRANT;_WINDLL;DLLEXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\..\..\include;..\..\..\..\include\msvc_compat;$(ProjectDir)..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4090;4146;4267;4334</DisableSpecificWarnings>
     </ClCompile>
@@ -440,7 +440,7 @@
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <PreprocessorDefinitions>JEMALLOC_NO_PRIVATE_NAMESPACE;_REENTRANT;_WINDLL;DLLEXPORT;JEMALLOC_DEBUG;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>JEMALLOC_NO_PRIVATE_NAMESPACE;_REENTRANT;_WINDLL;DLLEXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\..\..\include;..\..\..\..\include\msvc_compat;$(ProjectDir)..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4090;4146;4267;4334</DisableSpecificWarnings>
     </ClCompile>
@@ -450,7 +450,7 @@
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <PreprocessorDefinitions>JEMALLOC_NO_PRIVATE_NAMESPACE;_REENTRANT;_WINDLL;DLLEXPORT;JEMALLOC_DEBUG;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>JEMALLOC_NO_PRIVATE_NAMESPACE;_REENTRANT;_WINDLL;DLLEXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\..\..\include;..\..\..\..\include\msvc_compat;$(ProjectDir)..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4090;4146;4267;4334</DisableSpecificWarnings>
     </ClCompile>
@@ -480,7 +480,7 @@
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <PreprocessorDefinitions>_REENTRANT;_WINDLL;DLLEXPORT;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>JEMALLOC_NO_PRIVATE_NAMESPACE;_REENTRANT;_WINDLL;DLLEXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\..\..\include;..\..\..\..\include\msvc_compat;$(ProjectDir)..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4090;4146;4267;4334</DisableSpecificWarnings>
     </ClCompile>
@@ -501,7 +501,7 @@
       <PrecompiledHeader>
       </PrecompiledHeader>
       <AdditionalIncludeDirectories>..\..\..\..\include;..\..\..\..\include\msvc_compat;$(ProjectDir)..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>JEMALLOC_NO_PRIVATE_NAMESPACE;_REENTRANT;_WINDLL;DLLEXPORT;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>JEMALLOC_NO_PRIVATE_NAMESPACE;_REENTRANT;_WINDLL;DLLEXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4090;4146;4267;4334</DisableSpecificWarnings>
     </ClCompile>
     <Link />
@@ -511,7 +511,7 @@
       <PrecompiledHeader>
       </PrecompiledHeader>
       <AdditionalIncludeDirectories>..\..\..\..\include;..\..\..\..\include\msvc_compat;$(ProjectDir)..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>JEMALLOC_NO_PRIVATE_NAMESPACE;_REENTRANT;_WINDLL;DLLEXPORT;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>JEMALLOC_NO_PRIVATE_NAMESPACE;_REENTRANT;_WINDLL;DLLEXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4090;4146;4267;4334</DisableSpecificWarnings>
     </ClCompile>
     <Link />
