@@ -42,7 +42,11 @@
  * total number of bits in a pointer, e.g. on x64, for which the uppermost 16
  * bits are the same as bit 47.
  */
+#if defined(__ILP32__)
+#define LG_VADDR 32
+#else
 #define LG_VADDR 48
+#endif
 
 /* Defined if C11 atomics are available. */
 #define JEMALLOC_C11_ATOMICS 1
@@ -217,7 +221,9 @@
  * common sequences of mmap()/munmap() calls will cause virtual memory map
  * holes.
  */
+#if !defined(__ILP32__)
 #define JEMALLOC_RETAIN 
+#endif
 
 /* TLS is used to map arenas and magazine caches to threads. */
 #define JEMALLOC_TLS 
@@ -348,7 +354,11 @@
 #define LG_SIZEOF_INT 2
 
 /* sizeof(long) == 2^LG_SIZEOF_LONG. */
+#if defined(__ILP32__)
+#define LG_SIZEOF_LONG 2
+#else
 #define LG_SIZEOF_LONG 3
+#endif
 
 /* sizeof(long long) == 2^LG_SIZEOF_LONG_LONG. */
 #define LG_SIZEOF_LONG_LONG 3

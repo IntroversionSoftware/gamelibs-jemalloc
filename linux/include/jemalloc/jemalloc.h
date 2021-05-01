@@ -59,7 +59,11 @@ extern "C" {
 #endif
 
 /* sizeof(void *) == 2^LG_SIZEOF_PTR. */
+#if defined(__ILP32__)
+#define LG_SIZEOF_PTR 2
+#else
 #define LG_SIZEOF_PTR 3
+#endif
 
 /*
  * Name mangling for public symbols is controlled by --with-mangling and
