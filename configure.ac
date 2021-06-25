@@ -258,6 +258,7 @@ if test "x$GCC" = "xyes" ; then
   JE_CFLAGS_ADD([-Wno-missing-braces])
   dnl This one too.
   JE_CFLAGS_ADD([-Wno-missing-field-initializers])
+  JE_CFLAGS_ADD([-Wno-missing-attributes])
   JE_CFLAGS_ADD([-pipe])
   JE_CFLAGS_ADD([-g3])
 elif test "x$je_cv_msvc" = "xyes" ; then
@@ -322,6 +323,9 @@ if test "x$enable_cxx" = "x1" ; then
   else
     enable_cxx="0"
   fi
+fi
+if test "x$enable_cxx" = "x1"; then
+  AC_DEFINE([JEMALLOC_ENABLE_CXX], [ ])
 fi
 AC_SUBST([enable_cxx])
 AC_SUBST([CONFIGURE_CXXFLAGS])
