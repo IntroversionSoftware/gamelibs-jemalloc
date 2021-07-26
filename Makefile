@@ -73,7 +73,6 @@ SOURCES = \
 	src/fxp.c \
 	src/hook.c \
 	src/hpa.c \
-	src/hpa_central.c \
 	src/hpa_hooks.c \
 	src/hpdata.c \
 	src/inspect.c \
