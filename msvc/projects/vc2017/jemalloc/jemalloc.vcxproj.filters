@@ -372,9 +372,6 @@
     <ClInclude Include="..\..\..\..\include\jemalloc\internal\hpa.h">
       <Filter>Header Files\internal</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\jemalloc\internal\hpa_central.h">
-      <Filter>Header Files\internal</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\include\jemalloc\internal\hpa_opts.h">
       <Filter>Header Files\internal</Filter>
     </ClInclude>

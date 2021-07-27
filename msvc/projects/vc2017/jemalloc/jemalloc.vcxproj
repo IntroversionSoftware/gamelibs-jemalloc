@@ -160,7 +160,6 @@
     <ClInclude Include="..\..\..\..\include\jemalloc\internal\hash.h" />
     <ClInclude Include="..\..\..\..\include\jemalloc\internal\hook.h" />
     <ClInclude Include="..\..\..\..\include\jemalloc\internal\hpa.h" />
-    <ClInclude Include="..\..\..\..\include\jemalloc\internal\hpa_central.h" />
     <ClInclude Include="..\..\..\..\include\jemalloc\internal\hpa_opts.h" />
     <ClInclude Include="..\..\..\..\include\jemalloc\internal\hpdata.h" />
     <ClInclude Include="..\..\..\..\include\jemalloc\internal\inspect.h" />
