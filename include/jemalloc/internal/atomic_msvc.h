@@ -22,7 +22,7 @@ atomic_fence(atomic_memory_order_t mo) {
 #  if defined(_M_ARM) || defined(_M_ARM64)
 	/* ARM needs a barrier for everything but relaxed. */
 	if (mo != atomic_memory_order_relaxed) {
-		MemoryBarrier();
+		__dmb(_ARM64_BARRIER_ISH);
 	}
 #  elif defined(_M_IX86) || defined (_M_X64)
 	/* x86 needs a barrier only for seq_cst. */
@@ -51,6 +51,38 @@ atomic_fence(atomic_memory_order_t mo) {
 #define ATOMIC_INTERLOCKED_SUFFIX_2
 #define ATOMIC_INTERLOCKED_SUFFIX_3 64
 
+#if defined(_M_ARM) || defined(_M_ARM64)
+    #define _ATOMIC_INTRIN_RELAXED(x) ATOMIC_RAW_CONCAT(x, _nf)
+    #define _ATOMIC_INTRIN_ACQUIRE(x) ATOMIC_RAW_CONCAT(x, _acq)
+    #define _ATOMIC_INTRIN_RELEASE(x) ATOMIC_RAW_CONCAT(x, _rel)
+    #define _ATOMIC_INTRIN_ACQ_REL(x) x
+    #define _ATOMIC_CHOOSE_INTRINSIC(_order, _result, _intrin, ...)        \
+               switch (_order) {                                           \
+               case atomic_memory_order_relaxed:                           \
+                   _result = _ATOMIC_INTRIN_RELAXED(_intrin)(__VA_ARGS__); \
+                   break;                                                  \
+               case atomic_memory_order_acquire:                           \
+                   _result = _ATOMIC_INTRIN_ACQUIRE(_intrin)(__VA_ARGS__); \
+                   break;                                                  \
+               case atomic_memory_order_release:                           \
+                   _result = _ATOMIC_INTRIN_RELEASE(_intrin)(__VA_ARGS__); \
+                   break;                                                  \
+               default:                                                    \
+               case atomic_memory_order_acq_rel:                           \
+               case atomic_memory_order_seq_cst:                           \
+                   _result = _intrin(__VA_ARGS__);                         \
+                   break;                                                  \
+               }
+#else
+    #define _ATOMIC_INTRIN_RELAXED(x) x
+    #define _ATOMIC_INTRIN_ACQUIRE(x) x
+    #define _ATOMIC_INTRIN_RELEASE(x) x
+    #define _ATOMIC_INTRIN_ACQ_REL(x) x
+    #define _ATOMIC_CHOOSE_INTRINSIC(_order, _result, _intrin, ...)        \
+               (void)_order;                                               \
+               _result = _intrin(__VA_ARGS__)
+#endif
+
 #define JEMALLOC_GENERATE_ATOMICS(type, short_type, lg_size)		\
 typedef struct {							\
 	ATOMIC_INTERLOCKED_REPR(lg_size) repr;				\
@@ -59,10 +91,8 @@ typedef struct {							\
 ATOMIC_INLINE type							\
 atomic_load_##short_type(const atomic_##short_type##_t *a,		\
     atomic_memory_order_t mo) {						\
-	ATOMIC_INTERLOCKED_REPR(lg_size) ret = a->repr;			\
-	if (mo != atomic_memory_order_relaxed) {			\
-		atomic_fence(atomic_memory_order_acquire);		\
-	}								\
+	ATOMIC_INTERLOCKED_REPR(lg_size) ret;			        \
+        _ATOMIC_CHOOSE_INTRINSIC(mo, ret, ATOMIC_INTERLOCKED_NAME(_InterlockedCompareExchange, lg_size), &a->repr, 0, 0); \
 	return (type) ret;						\
 }									\
 									\
@@ -81,8 +111,9 @@ atomic_store_##short_type(atomic_##short_type##_t *a,			\
 ATOMIC_INLINE type							\
 atomic_exchange_##short_type(atomic_##short_type##_t *a, type val,	\
     atomic_memory_order_t mo) {						\
-	return (type)ATOMIC_INTERLOCKED_NAME(_InterlockedExchange,	\
-	    lg_size)(&a->repr, (ATOMIC_INTERLOCKED_REPR(lg_size))val);	\
+	ATOMIC_INTERLOCKED_REPR(lg_size) rv;                            \
+        _ATOMIC_CHOOSE_INTRINSIC(mo, rv, ATOMIC_INTERLOCKED_NAME(_InterlockedExchange, lg_size), &a->repr, (ATOMIC_INTERLOCKED_REPR(lg_size))val); \
+	return (type)rv;		                                \
 }									\
 									\
 ATOMIC_INLINE bool							\
@@ -93,9 +124,8 @@ atomic_compare_exchange_weak_##short_type(atomic_##short_type##_t *a,	\
 	    (ATOMIC_INTERLOCKED_REPR(lg_size))*expected;		\
 	ATOMIC_INTERLOCKED_REPR(lg_size) d =				\
 	    (ATOMIC_INTERLOCKED_REPR(lg_size))desired;			\
-	ATOMIC_INTERLOCKED_REPR(lg_size) old =				\
-	    ATOMIC_INTERLOCKED_NAME(_InterlockedCompareExchange, 	\
-		lg_size)(&a->repr, d, e);				\
+	ATOMIC_INTERLOCKED_REPR(lg_size) old;				\
+        _ATOMIC_CHOOSE_INTRINSIC(success_mo, old, ATOMIC_INTERLOCKED_NAME(_InterlockedCompareExchange, lg_size), &a->repr, d, e); \
 	if (old == e) {							\
 		return true;						\
 	} else {							\
@@ -120,8 +150,9 @@ JEMALLOC_GENERATE_ATOMICS(type, short_type, lg_size)			\
 ATOMIC_INLINE type							\
 atomic_fetch_add_##short_type(atomic_##short_type##_t *a,		\
     type val, atomic_memory_order_t mo) {				\
-	return (type)ATOMIC_INTERLOCKED_NAME(_InterlockedExchangeAdd,	\
-	    lg_size)(&a->repr, (ATOMIC_INTERLOCKED_REPR(lg_size))val);	\
+	ATOMIC_INTERLOCKED_REPR(lg_size) rv;                            \
+        _ATOMIC_CHOOSE_INTRINSIC(mo, rv, ATOMIC_INTERLOCKED_NAME(_InterlockedExchangeAdd, lg_size), &a->repr, (ATOMIC_INTERLOCKED_REPR(lg_size))val); \
+	return (type)rv;		                                \
 }									\
 									\
 ATOMIC_INLINE type							\
@@ -139,20 +170,23 @@ atomic_fetch_sub_##short_type(atomic_##short_type##_t *a,		\
 ATOMIC_INLINE type							\
 atomic_fetch_and_##short_type(atomic_##short_type##_t *a,		\
     type val, atomic_memory_order_t mo) {				\
-	return (type)ATOMIC_INTERLOCKED_NAME(_InterlockedAnd, lg_size)(	\
-	    &a->repr, (ATOMIC_INTERLOCKED_REPR(lg_size))val);		\
+	ATOMIC_INTERLOCKED_REPR(lg_size) rv;                            \
+        _ATOMIC_CHOOSE_INTRINSIC(mo, rv, ATOMIC_INTERLOCKED_NAME(_InterlockedAnd, lg_size), &a->repr, (ATOMIC_INTERLOCKED_REPR(lg_size))val); \
+	return (type)rv;		                                \
 }									\
 ATOMIC_INLINE type							\
 atomic_fetch_or_##short_type(atomic_##short_type##_t *a,		\
     type val, atomic_memory_order_t mo) {				\
-	return (type)ATOMIC_INTERLOCKED_NAME(_InterlockedOr, lg_size)(	\
-	    &a->repr, (ATOMIC_INTERLOCKED_REPR(lg_size))val);		\
+	ATOMIC_INTERLOCKED_REPR(lg_size) rv;                            \
+        _ATOMIC_CHOOSE_INTRINSIC(mo, rv, ATOMIC_INTERLOCKED_NAME(_InterlockedOr, lg_size), &a->repr, (ATOMIC_INTERLOCKED_REPR(lg_size))val); \
+	return (type)rv;		                                \
 }									\
 ATOMIC_INLINE type							\
 atomic_fetch_xor_##short_type(atomic_##short_type##_t *a,		\
     type val, atomic_memory_order_t mo) {				\
-	return (type)ATOMIC_INTERLOCKED_NAME(_InterlockedXor, lg_size)(	\
-	    &a->repr, (ATOMIC_INTERLOCKED_REPR(lg_size))val);		\
+	ATOMIC_INTERLOCKED_REPR(lg_size) rv;                            \
+        _ATOMIC_CHOOSE_INTRINSIC(mo, rv, ATOMIC_INTERLOCKED_NAME(_InterlockedXor, lg_size), &a->repr, (ATOMIC_INTERLOCKED_REPR(lg_size))val); \
+	return (type)rv;		                                \
 }
 
 #endif /* JEMALLOC_INTERNAL_ATOMIC_MSVC_H */
