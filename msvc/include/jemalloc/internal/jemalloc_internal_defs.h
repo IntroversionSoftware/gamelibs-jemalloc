@@ -33,13 +33,14 @@
  * Hyper-threaded CPUs may need a special instruction inside spin loops in
  * order to yield to another virtual CPU.
  */
-#if !defined(_M_ARM) && !defined(_M_ARM64)
+#if defined(_M_ARM) || defined(_M_ARM64)
+#define CPU_SPINWAIT __yield()
+#else
 #define CPU_SPINWAIT _mm_pause()
+#endif
+
 /* 1 if CPU_SPINWAIT is defined, 0 otherwise. */
 #define HAVE_CPU_SPINWAIT 1
-#else
-#define HAVE_CPU_SPINWAIT 0
-#endif
 
 /*
  * Number of significant bits in virtual addresses.  This may be less than the
