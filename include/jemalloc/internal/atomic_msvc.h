@@ -96,7 +96,7 @@ ATOMIC_INLINE type							\
 atomic_load_##short_type(const atomic_##short_type##_t *a,		\
     atomic_memory_order_t mo) {						\
 	ATOMIC_INTERLOCKED_REPR(lg_size) ret;			        \
-        _ATOMIC_CHOOSE_INTRINSIC(mo, ret, ATOMIC_INTERLOCKED_NAME(_InterlockedCompareExchange, lg_size), &a->repr, 0, 0); \
+        _ATOMIC_CHOOSE_INTRINSIC(mo, ret, ATOMIC_INTERLOCKED_NAME(_InterlockedCompareExchange, lg_size), &((atomic_##short_type##_t *)a)->repr, 0, 0); \
 	return (type) ret;						\
 }									\
 									\
