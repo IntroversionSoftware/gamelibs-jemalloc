@@ -4,12 +4,14 @@
 #include "jemalloc/internal/pac.h"
 
 static edata_t *pac_alloc_impl(tsdn_t *tsdn, pai_t *self, size_t size,
-    size_t alignment, bool zero);
+    size_t alignment, bool zero, bool *deferred_work_generated);
 static bool pac_expand_impl(tsdn_t *tsdn, pai_t *self, edata_t *edata,
-    size_t old_size, size_t new_size, bool zero);
+    size_t old_size, size_t new_size, bool zero, bool *deferred_work_generated);
 static bool pac_shrink_impl(tsdn_t *tsdn, pai_t *self, edata_t *edata,
-    size_t old_size, size_t new_size);
-static void pac_dalloc_impl(tsdn_t *tsdn, pai_t *self, edata_t *edata);
+    size_t old_size, size_t new_size, bool *deferred_work_generated);
+static void pac_dalloc_impl(tsdn_t *tsdn, pai_t *self, edata_t *edata,
+    bool *deferred_work_generated);
+static uint64_t pac_time_until_deferred_work(tsdn_t *tsdn, pai_t *self);
 
 static ehooks_t *
 pac_ehooks_get(pac_t *pac) {
@@ -96,6 +98,7 @@ pac_init(tsdn_t *tsdn, pac_t *pac, base_t *base, emap_t *emap,
 	pac->pai.shrink = &pac_shrink_impl;
 	pac->pai.dalloc = &pac_dalloc_impl;
 	pac->pai.dalloc_batch = &pai_dalloc_batch_default;
+	pac->pai.time_until_deferred_work = &pac_time_until_deferred_work;
 
 	return false;
 }
@@ -107,8 +110,10 @@ pac_may_have_muzzy(pac_t *pac) {
 
 static edata_t *
 pac_alloc_impl(tsdn_t *tsdn, pai_t *self, size_t size, size_t alignment,
-    bool zero) {
+    bool zero, bool *deferred_work_generated) {
 	pac_t *pac = (pac_t *)self;
+
+	*deferred_work_generated = false;
 
 	ehooks_t *ehooks = pac_ehooks_get(pac);
 	edata_t *edata = ecache_alloc(tsdn, pac, ehooks, &pac->ecache_dirty,
@@ -131,9 +136,11 @@ pac_alloc_impl(tsdn_t *tsdn, pai_t *self, size_t size, size_t alignment,
 
 static bool
 pac_expand_impl(tsdn_t *tsdn, pai_t *self, edata_t *edata, size_t old_size,
-    size_t new_size, bool zero) {
+    size_t new_size, bool zero, bool *deferred_work_generated) {
 	pac_t *pac = (pac_t *)self;
 	ehooks_t *ehooks = pac_ehooks_get(pac);
+
+	*deferred_work_generated = false;
 
 	size_t mapped_add = 0;
 	size_t expand_amount = new_size - old_size;
@@ -169,12 +176,13 @@ pac_expand_impl(tsdn_t *tsdn, pai_t *self, edata_t *edata, size_t old_size,
 
 static bool
 pac_shrink_impl(tsdn_t *tsdn, pai_t *self, edata_t *edata, size_t old_size,
-    size_t new_size) {
+    size_t new_size, bool *deferred_work_generated) {
 	pac_t *pac = (pac_t *)self;
-
 	ehooks_t *ehooks = pac_ehooks_get(pac);
+
 	size_t shrink_amount = old_size - new_size;
 
+	*deferred_work_generated = false;
 
 	if (ehooks_split_will_fail(ehooks)) {
 		return true;
@@ -186,14 +194,52 @@ pac_shrink_impl(tsdn_t *tsdn, pai_t *self, edata_t *edata, size_t old_size,
 		return true;
 	}
 	ecache_dalloc(tsdn, pac, ehooks, &pac->ecache_dirty, trail);
+	*deferred_work_generated = true;
 	return false;
 }
 
 static void
-pac_dalloc_impl(tsdn_t *tsdn, pai_t *self, edata_t *edata) {
+pac_dalloc_impl(tsdn_t *tsdn, pai_t *self, edata_t *edata,
+    bool *deferred_work_generated) {
 	pac_t *pac = (pac_t *)self;
 	ehooks_t *ehooks = pac_ehooks_get(pac);
 	ecache_dalloc(tsdn, pac, ehooks, &pac->ecache_dirty, edata);
+	/* Purging of deallocated pages is deferred */
+	*deferred_work_generated = true;
+}
+
+static inline uint64_t
+pac_ns_until_purge(tsdn_t *tsdn, decay_t *decay, size_t npages) {
+	if (malloc_mutex_trylock(tsdn, &decay->mtx)) {
+		/* Use minimal interval if decay is contended. */
+		return BACKGROUND_THREAD_DEFERRED_MIN;
+	}
+	uint64_t result = decay_ns_until_purge(decay, npages,
+	    ARENA_DEFERRED_PURGE_NPAGES_THRESHOLD);
+
+	malloc_mutex_unlock(tsdn, &decay->mtx);
+	return result;
+}
+
+static uint64_t
+pac_time_until_deferred_work(tsdn_t *tsdn, pai_t *self) {
+	uint64_t time;
+	pac_t *pac = (pac_t *)self;
+
+	time = pac_ns_until_purge(tsdn,
+	    &pac->decay_dirty,
+	    ecache_npages_get(&pac->ecache_dirty));
+	if (time == BACKGROUND_THREAD_DEFERRED_MIN) {
+		return time;
+	}
+
+	uint64_t muzzy = pac_ns_until_purge(tsdn,
+	    &pac->decay_muzzy,
+	    ecache_npages_get(&pac->ecache_muzzy));
+	if (muzzy < time) {
+		time = muzzy;
+	}
+	return time;
 }
 
 bool

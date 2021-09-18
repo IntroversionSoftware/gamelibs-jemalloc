@@ -8,6 +8,12 @@
 #include "jemalloc/internal/pages.h"
 #include "jemalloc/internal/stats.h"
 
+/*
+ * When the amount of pages to be purged exceeds this amount, deferred purge
+ * should happen.
+ */
+#define ARENA_DEFERRED_PURGE_NPAGES_THRESHOLD UINT64_C(1024)
+
 extern ssize_t opt_dirty_decay_ms;
 extern ssize_t opt_muzzy_decay_ms;
 
@@ -16,7 +22,6 @@ extern const char *percpu_arena_mode_names[];
 
 extern div_info_t arena_binind_div_info[SC_NBINS];
 
-extern const uint64_t h_steps[SMOOTHSTEP_NSTEPS];
 extern malloc_mutex_t arenas_lock;
 extern emap_t arena_emap_global;
 
@@ -37,7 +42,7 @@ void arena_stats_merge(tsdn_t *tsdn, arena_t *arena, unsigned *nthreads,
     size_t *nactive, size_t *ndirty, size_t *nmuzzy, arena_stats_t *astats,
     bin_stats_data_t *bstats, arena_stats_large_t *lstats,
     pac_estats_t *estats, hpa_shard_stats_t *hpastats, sec_stats_t *secstats);
-void arena_handle_new_dirty_pages(tsdn_t *tsdn, arena_t *arena);
+void arena_handle_deferred_work(tsdn_t *tsdn, arena_t *arena);
 edata_t *arena_extent_alloc_large(tsdn_t *tsdn, arena_t *arena,
     size_t usize, size_t alignment, bool zero);
 void arena_extent_dalloc_large_prep(tsdn_t *tsdn, arena_t *arena,
@@ -51,6 +56,7 @@ bool arena_decay_ms_set(tsdn_t *tsdn, arena_t *arena, extent_state_t state,
 ssize_t arena_decay_ms_get(arena_t *arena, extent_state_t state);
 void arena_decay(tsdn_t *tsdn, arena_t *arena, bool is_background_thread,
     bool all);
+uint64_t arena_time_until_deferred(tsdn_t *tsdn, arena_t *arena);
 void arena_do_deferred_work(tsdn_t *tsdn, arena_t *arena);
 void arena_reset(tsd_t *tsd, arena_t *arena);
 void arena_destroy(tsd_t *tsd, arena_t *arena);

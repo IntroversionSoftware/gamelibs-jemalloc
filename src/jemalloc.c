@@ -1416,10 +1416,6 @@ malloc_conf_init_helper(sc_data_t *sc_data, unsigned bin_shard_sizes[SC_NBINS],
 					   CONF_CHECK_MIN, CONF_CHECK_MAX,
 					   true);
 			CONF_HANDLE_BOOL(opt_hpa, "hpa")
-			CONF_HANDLE_SSIZE_T(
-			    opt_background_thread_hpa_interval_max_ms,
-			    "background_thread_hpa_interval_max_ms", -1,
-			    SSIZE_MAX)
 			CONF_HANDLE_SIZE_T(opt_hpa_opts.slab_max_alloc,
 			    "hpa_slab_max_alloc", PAGE, HUGEPAGE,
 			    CONF_CHECK_MIN, CONF_CHECK_MAX, true);
@@ -1447,9 +1443,15 @@ malloc_conf_init_helper(sc_data_t *sc_data, unsigned bin_shard_sizes[SC_NBINS],
 				CONF_CONTINUE;
 			}
 
-			CONF_HANDLE_SIZE_T(
+			CONF_HANDLE_UINT64_T(
 			    opt_hpa_opts.hugify_delay_ms, "hpa_hugify_delay_ms",
-			    0, 0, CONF_CHECK_MIN, CONF_DONT_CHECK_MAX, true);
+			    0, 0, CONF_DONT_CHECK_MIN, CONF_DONT_CHECK_MAX,
+			    false);
+
+			CONF_HANDLE_UINT64_T(
+			    opt_hpa_opts.min_purge_interval_ms,
+			    "hpa_min_purge_interval_ms", 0, 0,
+			    CONF_DONT_CHECK_MIN, CONF_DONT_CHECK_MAX, false);
 
 			if (CONF_MATCH("hpa_dirty_mult")) {
 				if (CONF_MATCH_VALUE("-1")) {
@@ -1652,11 +1654,6 @@ malloc_conf_init(sc_data_t *sc_data, unsigned bin_shard_sizes[SC_NBINS]) {
 	malloc_conf_init_helper(NULL, NULL, true, opts_cache, buf);
 	malloc_conf_init_helper(sc_data, bin_shard_sizes, false, opts_cache,
 	    NULL);
-	if (opt_hpa && opt_background_thread_hpa_interval_max_ms
-	    == BACKGROUND_THREAD_HPA_INTERVAL_MAX_UNINITIALIZED) {
-		opt_background_thread_hpa_interval_max_ms =
-		    BACKGROUND_THREAD_HPA_INTERVAL_MAX_DEFAULT_WHEN_ENABLED;
-	}
 }
 
 #undef MALLOC_CONF_NSOURCES
