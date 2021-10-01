@@ -51,6 +51,7 @@ sources = [
     'src/extent_dss.c',
     'src/extent_mmap.c',
     'src/fxp.c',
+    'src/guard.c',
     'src/hook.c',
     'src/hpa.c',
     'src/hpa_hooks.c',
