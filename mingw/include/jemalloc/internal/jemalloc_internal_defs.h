@@ -313,6 +313,9 @@
  */
 /* #undef JEMALLOC_MADVISE_NOCORE */
 
+/* Defined if mprotect(2) is available. */
+/* #undef JEMALLOC_HAVE_MPROTECT */
+
 /*
  * Defined if transparent huge pages (THPs) are supported via the
  * MADV_[NO]HUGEPAGE arguments to madvise(2), and THP support is enabled.
@@ -334,6 +337,11 @@
  * Defined if memcntl page admin call is supported
  */
 /* #undef JEMALLOC_HAVE_MEMCNTL */
+
+/*
+ * Defined if malloc_size is supported
+ */
+/* #undef JEMALLOC_HAVE_MALLOC_SIZE */
 
 /* Define if operating system has alloca.h header. */
 /* #undef JEMALLOC_HAS_ALLOCA_H */
@@ -401,6 +409,9 @@
 
 /* Performs additional safety checks when defined. */
 /* #undef JEMALLOC_OPT_SAFETY_CHECKS */
+
+/* Is C++ support being built? */
+/* #undef JEMALLOC_ENABLE_CXX */
 
 /* Performs additional size checks when defined. */
 /* #undef JEMALLOC_OPT_SIZE_CHECKS */
