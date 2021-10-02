@@ -237,15 +237,26 @@
  * ffs*() functions to use for bitmapping.  Don't use these directly; instead,
  * use ffs_*() from util.h.
  */
-#define JEMALLOC_INTERNAL_FFSLL ffsll
-#define JEMALLOC_INTERNAL_FFSL ffsl
-#define JEMALLOC_INTERNAL_FFS ffs
+#ifdef __clang__
+#    define JEMALLOC_INTERNAL_FFSLL __builtin_ffsll
+#    define JEMALLOC_INTERNAL_FFSL __builtin_ffsl
+#    define JEMALLOC_INTERNAL_FFS __builtin_ffs
+#else
+#    define JEMALLOC_INTERNAL_FFSLL ffsll
+#    define JEMALLOC_INTERNAL_FFSL ffsl
+#    define JEMALLOC_INTERNAL_FFS ffs
+#endif
 
 /*
  * popcount*() functions to use for bitmapping.
  */
+#ifdef __clang__
+#    define JEMALLOC_INTERNAL_POPCOUNTL __builtin_popcountl
+#    define JEMALLOC_INTERNAL_POPCOUNT __builtin_popcount
+#else
 /* #undef JEMALLOC_INTERNAL_POPCOUNTL */
 /* #undef JEMALLOC_INTERNAL_POPCOUNT */
+#endif
 
 /*
  * If defined, explicitly attempt to more uniformly distribute large allocation
@@ -318,6 +329,9 @@
  */
 /* #undef JEMALLOC_MADVISE_NOCORE */
 
+/* Defined if mprotect(2) is available. */
+/* #undef JEMALLOC_HAVE_MPROTECT */
+
 /*
  * Defined if transparent huge pages (THPs) are supported via the
  * MADV_[NO]HUGEPAGE arguments to madvise(2), and THP support is enabled.
@@ -339,6 +353,11 @@
  * Defined if memcntl page admin call is supported
  */
 /* #undef JEMALLOC_HAVE_MEMCNTL */
+
+/*
+ * Defined if malloc_size is supported
+ */
+/* #undef JEMALLOC_HAVE_MALLOC_SIZE */
 
 /* Define if operating system has alloca.h header. */
 /* #undef JEMALLOC_HAS_ALLOCA_H */
@@ -406,6 +425,9 @@
 
 /* Performs additional safety checks when defined. */
 /* #undef JEMALLOC_OPT_SAFETY_CHECKS */
+
+/* Is C++ support being built? */
+/* #undef JEMALLOC_ENABLE_CXX */
 
 /* Performs additional size checks when defined. */
 /* #undef JEMALLOC_OPT_SIZE_CHECKS */
