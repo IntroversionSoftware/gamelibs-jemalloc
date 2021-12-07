@@ -52,20 +52,22 @@
 /* Defined if C11 atomics are available. */
 /* #undef JEMALLOC_C11_ATOMICS */
 
+#if defined(__clang__) || defined(__GNUC__)
 /* Defined if GCC __atomic atomics are available. */
-/* #undef JEMALLOC_GCC_ATOMIC_ATOMICS */
+#define JEMALLOC_GCC_ATOMIC_ATOMICS 1
 /* and the 8-bit variant support. */
-/* #undef JEMALLOC_GCC_U8_ATOMIC_ATOMICS */
+#define JEMALLOC_GCC_U8_ATOMIC_ATOMICS 1
 
 /* Defined if GCC __sync atomics are available. */
-/* #undef JEMALLOC_GCC_SYNC_ATOMICS */
+#define JEMALLOC_GCC_SYNC_ATOMICS 1
 /* and the 8-bit variant support. */
-/* #undef JEMALLOC_GCC_U8_SYNC_ATOMICS */
+#define JEMALLOC_GCC_U8_SYNC_ATOMICS 1
 
 /*
  * Defined if __builtin_clz() and __builtin_clzl() are available.
  */
-/* #undef JEMALLOC_HAVE_BUILTIN_CLZ */
+#define JEMALLOC_HAVE_BUILTIN_CLZ 1
+#endif
 
 /*
  * Defined if os_unfair_lock_*() functions are available, as provided by Darwin.
@@ -363,7 +365,7 @@
 /* #undef JEMALLOC_HAS_ALLOCA_H */
 
 /* C99 restrict keyword supported. */
-/* #undef JEMALLOC_HAS_RESTRICT */
+#define JEMALLOC_HAS_RESTRICT 1
 
 /* For use by hash code. */
 /* #undef JEMALLOC_BIG_ENDIAN */
