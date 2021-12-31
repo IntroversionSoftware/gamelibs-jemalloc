@@ -27,4 +27,5 @@
 #  define je_sdallocx je_sdallocx
 #  define je_xallocx je_xallocx
 #  define je_valloc je_valloc
+#  define je_malloc_size je_malloc_size
 #endif
