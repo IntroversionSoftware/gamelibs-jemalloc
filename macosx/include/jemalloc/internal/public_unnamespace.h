@@ -21,3 +21,4 @@
 #undef je_sdallocx
 #undef je_xallocx
 #undef je_valloc
+#undef je_malloc_size

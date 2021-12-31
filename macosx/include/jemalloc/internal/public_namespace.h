@@ -21,3 +21,4 @@
 #define je_sdallocx JEMALLOC_N(sdallocx)
 #define je_xallocx JEMALLOC_N(xallocx)
 #define je_valloc JEMALLOC_N(valloc)
+#define je_malloc_size JEMALLOC_N(malloc_size)
