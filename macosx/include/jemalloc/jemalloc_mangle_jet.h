@@ -32,6 +32,7 @@
 #  define sdallocx jet_sdallocx
 #  define xallocx jet_xallocx
 #  define valloc jet_valloc
+#  define malloc_size jet_malloc_size
 #endif
 
 /*
@@ -65,4 +66,5 @@
 #  undef jet_sdallocx
 #  undef jet_xallocx
 #  undef jet_valloc
+#  undef jet_malloc_size
 #endif
