@@ -21,3 +21,4 @@ sallocx:je_sallocx
 sdallocx:je_sdallocx
 xallocx:je_xallocx
 valloc:je_valloc
+malloc_size:je_malloc_size

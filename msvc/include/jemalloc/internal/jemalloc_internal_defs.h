@@ -429,10 +429,13 @@
 /* #undef JEMALLOC_OPT_SAFETY_CHECKS */
 
 /* Is C++ support being built? */
-/* #undef JEMALLOC_ENABLE_CXX */
+#define JEMALLOC_ENABLE_CXX 1
 
 /* Performs additional size checks when defined. */
 /* #undef JEMALLOC_OPT_SIZE_CHECKS */
+
+/* Allows sampled junk and stash for checking use-after-free when defined. */
+/* #undef JEMALLOC_UAF_DETECTION */
 
 /* Darwin VM_MAKE_TAG support */
 /* #undef JEMALLOC_HAVE_VM_MAKE_TAG */

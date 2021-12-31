@@ -88,6 +88,7 @@ extern "C" {
 #  define je_sdallocx je_sdallocx
 #  define je_xallocx je_xallocx
 #  define je_valloc je_valloc
+#  define je_malloc_size je_malloc_size
 #endif
 
 #include <stdlib.h>
@@ -96,11 +97,11 @@ extern "C" {
 #include <limits.h>
 #include <strings.h>
 
-#define JEMALLOC_VERSION "5.2.1-748-g4bd347f8c17f3075c535ef61571801221bc91be8"
+#define JEMALLOC_VERSION "5.2.1-843-g883f8508fd76a7955f35953f052463448168aca8"
 #define JEMALLOC_VERSION_MAJOR 5
 #define JEMALLOC_VERSION_MINOR 2
 #define JEMALLOC_VERSION_BUGFIX 1
-#define JEMALLOC_VERSION_NREV 748
+#define JEMALLOC_VERSION_NREV 843
 #define JEMALLOC_VERSION_GID "4bd347f8c17f3075c535ef61571801221bc91be8"
 #define JEMALLOC_VERSION_GID_IDENT 4bd347f8c17f3075c535ef61571801221bc91be8
 
@@ -295,6 +296,10 @@ JEMALLOC_EXPORT void JEMALLOC_NOTHROW	je_malloc_stats_print(
     const char *opts);
 JEMALLOC_EXPORT size_t JEMALLOC_NOTHROW	je_malloc_usable_size(
     JEMALLOC_USABLE_SIZE_CONST void *ptr) JEMALLOC_CXX_THROW;
+#ifdef JEMALLOC_HAVE_MALLOC_SIZE
+JEMALLOC_EXPORT size_t JEMALLOC_NOTHROW	je_malloc_size(
+    const void *ptr);
+#endif
 
 #ifdef JEMALLOC_OVERRIDE_MEMALIGN
 JEMALLOC_EXPORT JEMALLOC_ALLOCATOR JEMALLOC_RESTRICT_RETURN
@@ -420,6 +425,7 @@ struct extent_hooks_s {
 #  define sdallocx je_sdallocx
 #  define xallocx je_xallocx
 #  define valloc je_valloc
+#  define malloc_size je_malloc_size
 #endif
 
 /*
@@ -453,6 +459,7 @@ struct extent_hooks_s {
 #  undef je_sdallocx
 #  undef je_xallocx
 #  undef je_valloc
+#  undef je_malloc_size
 #endif
 
 #ifdef __cplusplus
