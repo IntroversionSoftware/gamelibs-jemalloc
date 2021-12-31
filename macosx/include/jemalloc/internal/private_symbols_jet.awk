@@ -26,6 +26,7 @@ BEGIN {
         _jet_sdallocx \
         _jet_xallocx \
         _jet_valloc \
+        _jet_malloc_size \
         _pthread_create \
         ", exported_symbol_names)
   # Store exported symbol names as keys in exported_symbols.
