@@ -26,6 +26,7 @@ BEGIN {
         _je_sdallocx \
         _je_xallocx \
         _je_valloc \
+        _je_malloc_size \
         _pthread_create \
         ", exported_symbol_names)
   # Store exported symbol names as keys in exported_symbols.
