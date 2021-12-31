@@ -32,6 +32,7 @@
 #  define sdallocx je_sdallocx
 #  define xallocx je_xallocx
 #  define valloc je_valloc
+#  define malloc_size je_malloc_size
 #endif
 
 /*
@@ -65,4 +66,5 @@
 #  undef je_sdallocx
 #  undef je_xallocx
 #  undef je_valloc
+#  undef je_malloc_size
 #endif

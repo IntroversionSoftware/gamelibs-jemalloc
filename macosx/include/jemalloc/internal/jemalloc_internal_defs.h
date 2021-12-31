@@ -104,7 +104,7 @@
 /*
  * Defined if clock_gettime(CLOCK_MONOTONIC, ...) is available.
  */
-/* #undef JEMALLOC_HAVE_CLOCK_MONOTONIC */
+#define JEMALLOC_HAVE_CLOCK_MONOTONIC 1
 
 /*
  * Defined if mach_absolute_time() is available.
@@ -318,7 +318,7 @@
 /* #undef JEMALLOC_MADVISE_NOCORE */
 
 /* Defined if mprotect(2) is available. */
-/* #undef JEMALLOC_HAVE_MPROTECT */
+#define JEMALLOC_HAVE_MPROTECT 1
 
 /*
  * Defined if transparent huge pages (THPs) are supported via the
@@ -345,7 +345,7 @@
 /*
  * Defined if malloc_size is supported
  */
-/* #undef JEMALLOC_HAVE_MALLOC_SIZE */
+#define JEMALLOC_HAVE_MALLOC_SIZE 1
 
 /* Define if operating system has alloca.h header. */
 /* #undef JEMALLOC_HAS_ALLOCA_H */
@@ -415,10 +415,13 @@
 /* #undef JEMALLOC_OPT_SAFETY_CHECKS */
 
 /* Is C++ support being built? */
-/* #undef JEMALLOC_ENABLE_CXX */
+#define JEMALLOC_ENABLE_CXX 1
 
 /* Performs additional size checks when defined. */
 /* #undef JEMALLOC_OPT_SIZE_CHECKS */
+
+/* Allows sampled junk and stash for checking use-after-free when defined. */
+/* #undef JEMALLOC_UAF_DETECTION */
 
 /* Darwin VM_MAKE_TAG support */
 #define JEMALLOC_HAVE_VM_MAKE_TAG 
