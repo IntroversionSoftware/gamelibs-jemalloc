@@ -38,6 +38,7 @@ static counter_accum_t stats_interval_accumulated;
 /* Per thread batch accum size for stats_interval. */
 uint64_t stats_interval_accum_batch;
 
+#ifdef JEMALLOC_STATS_PRINT
 /*
  * Forward declarations for the two top-level section helpers.  The public
  * stats_print() appears first (just below) and calls these; their definitions
@@ -2476,6 +2477,10 @@ stats_print_runtime_stats(emitter_t *emitter, bool merged, bool destroyed,
 
 	emitter_json_object_end(emitter); /* Close "stats.arenas". */
 }
+#else
+void
+stats_print(write_cb_t *write_cb, void *cbopaque, const char *opts) {}
+#endif
 
 static uint64_t
 stats_interval_new_event_wait(tsd_t *tsd) {
