@@ -236,7 +236,11 @@
  * Used to mark unreachable code to quiet "end of non-void" compiler warnings.
  * Don't use this directly; instead use unreachable() from util.h
  */
-#define JEMALLOC_INTERNAL_UNREACHABLE abort
+#ifdef __clang__
+#    define JEMALLOC_INTERNAL_UNREACHABLE __builtin_unreachable
+#else
+#    define JEMALLOC_INTERNAL_UNREACHABLE abort
+#endif
 
 /*
  * ffs*() functions to use for bitmapping.  Don't use these directly; instead,
