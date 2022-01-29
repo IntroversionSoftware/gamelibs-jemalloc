@@ -157,6 +157,9 @@
 /* JEMALLOC_STATS enables statistics calculation. */
 #define JEMALLOC_STATS 
 
+/* JEMALLOC_STATS_PRINT includes code for printing stats periodically */
+/* #undef JEMALLOC_STATS_PRINT */
+
 /* JEMALLOC_EXPERIMENTAL_SMALLOCX_API enables experimental smallocx API. */
 /* #undef JEMALLOC_EXPERIMENTAL_SMALLOCX_API */
 
