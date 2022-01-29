@@ -73,6 +73,7 @@ uint64_t stats_interval_accum_batch;
 
 /******************************************************************************/
 
+#ifdef JEMALLOC_STATS_PRINT
 static uint64_t
 rate_per_second(uint64_t value, uint64_t uptime_ns) {
 	uint64_t billion = 1000000000;
@@ -2111,6 +2112,10 @@ stats_print(write_cb_t *write_cb, void *cbopaque, const char *opts) {
 	emitter_table_printf(&emitter, "--- End jemalloc statistics ---\n");
 	emitter_end(&emitter);
 }
+#else
+void
+stats_print(write_cb_t *write_cb, void *cbopaque, const char *opts) {}
+#endif
 
 uint64_t
 stats_interval_new_event_wait(tsd_t *tsd) {
