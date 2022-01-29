@@ -179,7 +179,7 @@
 /* #undef JEMALLOC_DSS */
 
 /* Support memory filling (junk/zero). */
-#define JEMALLOC_FILL 
+/* #define JEMALLOC_FILL  */
 
 /* Support utrace(2)-based tracing. */
 /* #undef JEMALLOC_UTRACE */
