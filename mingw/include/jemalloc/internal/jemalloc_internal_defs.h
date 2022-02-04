@@ -147,6 +147,9 @@
 /* JEMALLOC_STATS enables statistics calculation. */
 #define JEMALLOC_STATS 
 
+/* JEMALLOC_STATS_PRINT includes code for printing stats periodically */
+/* #undef JEMALLOC_STATS_PRINT */
+
 /* JEMALLOC_EXPERIMENTAL_SMALLOCX_API enables experimental smallocx API. */
 /* #undef JEMALLOC_EXPERIMENTAL_SMALLOCX_API */
 
@@ -415,6 +418,9 @@
 
 /* Performs additional size checks when defined. */
 /* #undef JEMALLOC_OPT_SIZE_CHECKS */
+
+/* Allows sampled junk and stash for checking use-after-free when defined. */
+/* #undef JEMALLOC_UAF_DETECTION */
 
 /* Darwin VM_MAKE_TAG support */
 /* #undef JEMALLOC_HAVE_VM_MAKE_TAG */
