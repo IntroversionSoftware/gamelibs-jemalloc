@@ -21,7 +21,7 @@ malloc_getcpu(void) {
 #elif defined(__aarch64__) && defined(__APPLE__)
 	/* Other oses most likely use tpidr_el0 instead */
 	uintptr_t c;
-	asm volatile("mrs %x0, tpidrro_el0" : "=r"(c) :: "memory");
+	__asm__ volatile("mrs %x0, tpidrro_el0" : "=r"(c) :: "memory");
 	return (malloc_cpuid_t)(c & (1 << 3) - 1);
 #else
 	not_reached();
