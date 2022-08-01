@@ -196,7 +196,11 @@
 /* #undef LG_QUANTUM */
 
 /* One page is 2^LG_PAGE bytes. */
+#ifdef __aarch64__
+#define LG_PAGE 14
+#else
 #define LG_PAGE 12
+#endif
 
 /* Maximum number of regions in a slab. */
 /* #undef CONFIG_LG_SLAB_MAXREGS */
@@ -206,7 +210,11 @@
  * system does not explicitly support huge pages; system calls that require
  * explicit huge page support are separately configured.
  */
+#ifdef __aarch64__
+#define LG_HUGEPAGE 25
+#else
 #define LG_HUGEPAGE 21
+#endif
 
 /*
  * If defined, adjacent virtual memory mappings with identical attributes
