@@ -12,7 +12,7 @@
 #undef je_malloc_stats_print
 #undef je_malloc_usable_size
 #undef je_mallocx
-#undef je_smallocx_2f2332e0cd062443ae7e713ac40c85529b3411d2
+#undef je_smallocx_3fd69bd31102227faa3cda5cbfe9c20faba8fd4c
 #undef je_nallocx
 #undef je_posix_memalign
 #undef je_rallocx
@@ -22,3 +22,4 @@
 #undef je_xallocx
 #undef je_memalign
 #undef je_valloc
+#undef je_pvalloc

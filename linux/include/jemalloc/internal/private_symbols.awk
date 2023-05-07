@@ -17,7 +17,7 @@ BEGIN {
         je_malloc_stats_print \
         je_malloc_usable_size \
         je_mallocx \
-        je_smallocx_2f2332e0cd062443ae7e713ac40c85529b3411d2 \
+        je_smallocx_3fd69bd31102227faa3cda5cbfe9c20faba8fd4c \
         je_nallocx \
         je_posix_memalign \
         je_rallocx \
@@ -27,6 +27,7 @@ BEGIN {
         je_xallocx \
         je_memalign \
         je_valloc \
+        je_pvalloc \
         pthread_create \
         ", exported_symbol_names)
   # Store exported symbol names as keys in exported_symbols.

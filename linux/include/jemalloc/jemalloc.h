@@ -33,6 +33,7 @@ extern "C" {
  */
 #define JEMALLOC_OVERRIDE_MEMALIGN
 #define JEMALLOC_OVERRIDE_VALLOC
+#define JEMALLOC_OVERRIDE_PVALLOC
 
 /*
  * At least Linux omits the "const" in:
@@ -85,7 +86,7 @@ extern "C" {
 #  define je_malloc_stats_print je_malloc_stats_print
 #  define je_malloc_usable_size je_malloc_usable_size
 #  define je_mallocx je_mallocx
-#  define je_smallocx_2f2332e0cd062443ae7e713ac40c85529b3411d2 je_smallocx_2f2332e0cd062443ae7e713ac40c85529b3411d2
+#  define je_smallocx_3fd69bd31102227faa3cda5cbfe9c20faba8fd4c je_smallocx_3fd69bd31102227faa3cda5cbfe9c20faba8fd4c
 #  define je_nallocx je_nallocx
 #  define je_posix_memalign je_posix_memalign
 #  define je_rallocx je_rallocx
@@ -95,6 +96,7 @@ extern "C" {
 #  define je_xallocx je_xallocx
 #  define je_memalign je_memalign
 #  define je_valloc je_valloc
+#  define je_pvalloc je_pvalloc
 #endif
 
 #include <stdlib.h>
@@ -103,13 +105,13 @@ extern "C" {
 #include <limits.h>
 #include <strings.h>
 
-#define JEMALLOC_VERSION "5.2.1-843-g883f8508fd76a7955f35953f052463448168aca8"
+#define JEMALLOC_VERSION "5.3.0-76-g3fd69bd31102227faa3cda5cbfe9c20faba8fd4c"
 #define JEMALLOC_VERSION_MAJOR 5
-#define JEMALLOC_VERSION_MINOR 2
-#define JEMALLOC_VERSION_BUGFIX 1
-#define JEMALLOC_VERSION_NREV 843
-#define JEMALLOC_VERSION_GID "2f2332e0cd062443ae7e713ac40c85529b3411d2"
-#define JEMALLOC_VERSION_GID_IDENT 2f2332e0cd062443ae7e713ac40c85529b3411d2
+#define JEMALLOC_VERSION_MINOR 3
+#define JEMALLOC_VERSION_BUGFIX 0
+#define JEMALLOC_VERSION_NREV 76
+#define JEMALLOC_VERSION_GID "3fd69bd31102227faa3cda5cbfe9c20faba8fd4c"
+#define JEMALLOC_VERSION_GID_IDENT 3fd69bd31102227faa3cda5cbfe9c20faba8fd4c
 
 #define MALLOCX_LG_ALIGN(la)	((int)(la))
 #if LG_SIZEOF_PTR == 2
@@ -241,7 +243,7 @@ extern "C" {
 #  define JEMALLOC_COLD
 #endif
 
-#if defined(__APPLE__) && !defined(JEMALLOC_NO_RENAME)
+#if (defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || (defined(__linux__) && !defined(__GLIBC__))) && !defined(JEMALLOC_NO_RENAME)
 #  define JEMALLOC_SYS_NOTHROW
 #else
 #  define JEMALLOC_SYS_NOTHROW JEMALLOC_NOTHROW
@@ -302,6 +304,10 @@ JEMALLOC_EXPORT void JEMALLOC_NOTHROW	je_malloc_stats_print(
     const char *opts);
 JEMALLOC_EXPORT size_t JEMALLOC_NOTHROW	je_malloc_usable_size(
     JEMALLOC_USABLE_SIZE_CONST void *ptr) JEMALLOC_CXX_THROW;
+#ifdef JEMALLOC_HAVE_MALLOC_SIZE
+JEMALLOC_EXPORT size_t JEMALLOC_NOTHROW	je_malloc_size(
+    const void *ptr);
+#endif
 
 #ifdef JEMALLOC_OVERRIDE_MEMALIGN
 JEMALLOC_EXPORT JEMALLOC_ALLOCATOR JEMALLOC_RESTRICT_RETURN
@@ -312,6 +318,12 @@ JEMALLOC_EXPORT JEMALLOC_ALLOCATOR JEMALLOC_RESTRICT_RETURN
 #ifdef JEMALLOC_OVERRIDE_VALLOC
 JEMALLOC_EXPORT JEMALLOC_ALLOCATOR JEMALLOC_RESTRICT_RETURN
     void JEMALLOC_SYS_NOTHROW	*je_valloc(size_t size) JEMALLOC_CXX_THROW
+    JEMALLOC_ATTR(malloc);
+#endif
+
+#ifdef JEMALLOC_OVERRIDE_PVALLOC
+JEMALLOC_EXPORT JEMALLOC_ALLOCATOR JEMALLOC_RESTRICT_RETURN
+    void JEMALLOC_SYS_NOTHROW	*je_pvalloc(size_t size) JEMALLOC_CXX_THROW
     JEMALLOC_ATTR(malloc);
 #endif
 
@@ -418,7 +430,7 @@ struct extent_hooks_s {
 #  define malloc_stats_print je_malloc_stats_print
 #  define malloc_usable_size je_malloc_usable_size
 #  define mallocx je_mallocx
-#  define smallocx_2f2332e0cd062443ae7e713ac40c85529b3411d2 je_smallocx_2f2332e0cd062443ae7e713ac40c85529b3411d2
+#  define smallocx_3fd69bd31102227faa3cda5cbfe9c20faba8fd4c je_smallocx_3fd69bd31102227faa3cda5cbfe9c20faba8fd4c
 #  define nallocx je_nallocx
 #  define posix_memalign je_posix_memalign
 #  define rallocx je_rallocx
@@ -428,6 +440,7 @@ struct extent_hooks_s {
 #  define xallocx je_xallocx
 #  define memalign je_memalign
 #  define valloc je_valloc
+#  define pvalloc je_pvalloc
 #endif
 
 /*
@@ -452,7 +465,7 @@ struct extent_hooks_s {
 #  undef je_malloc_stats_print
 #  undef je_malloc_usable_size
 #  undef je_mallocx
-#  undef je_smallocx_2f2332e0cd062443ae7e713ac40c85529b3411d2
+#  undef je_smallocx_3fd69bd31102227faa3cda5cbfe9c20faba8fd4c
 #  undef je_nallocx
 #  undef je_posix_memalign
 #  undef je_rallocx
@@ -462,6 +475,7 @@ struct extent_hooks_s {
 #  undef je_xallocx
 #  undef je_memalign
 #  undef je_valloc
+#  undef je_pvalloc
 #endif
 
 #ifdef __cplusplus
