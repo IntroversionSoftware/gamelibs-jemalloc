@@ -158,7 +158,7 @@ extern "C" {
 #define MALLCTL_ARENAS_DESTROYED	4097
 
 #if defined(__cplusplus) && defined(JEMALLOC_USE_CXX_THROW)
-#  define JEMALLOC_CXX_THROW throw()
+#  define JEMALLOC_CXX_THROW noexcept
 #else
 #  define JEMALLOC_CXX_THROW
 #endif
