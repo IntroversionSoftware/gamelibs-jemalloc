@@ -12,6 +12,7 @@
 #include "jemalloc/internal/prof_stats.h"
 #include "jemalloc/internal/tcache.h"
 
+#ifdef JEMALLOC_STATS_PRINT
 static const char *const global_mutex_names[mutex_prof_num_global_mutexes] = {
 #define OP(mtx) #mtx,
     MUTEX_PROF_GLOBAL_MUTEXES
@@ -23,6 +24,7 @@ static const char *const arena_mutex_names[mutex_prof_num_arena_mutexes] = {
     MUTEX_PROF_ARENA_MUTEXES
 #undef OP
 };
+#endif
 
 #define CTL_GET(n, v, t)                                                       \
 	do {                                                                   \
