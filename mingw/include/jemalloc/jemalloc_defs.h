@@ -28,7 +28,7 @@
  * present on the system.
  */
 /* #undef JEMALLOC_OVERRIDE_MEMALIGN */
-/* #undef JEMALLOC_OVERRIDE_VALLOC */
+#define JEMALLOC_OVERRIDE_VALLOC
 /* #undef JEMALLOC_OVERRIDE_PVALLOC */
 
 /*
