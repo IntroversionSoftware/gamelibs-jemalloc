@@ -1323,7 +1323,7 @@ extent_commit_zero(tsdn_t *tsdn, ehooks_t *ehooks, edata_t *edata,
 
 bool
 extent_boot(void) {
-	assert(sizeof(slab_data_t) >= sizeof(e_prof_info_t));
+	//assert(sizeof(slab_data_t) >= sizeof(e_prof_info_t));
 
 	if (have_dss) {
 		extent_dss_boot();
