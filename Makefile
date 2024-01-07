@@ -45,7 +45,11 @@ prefix ?= /usr/local
 libdir := $(prefix)/lib
 includedir := $(prefix)/include
 
-HEADERS = $(wildcard $(PLATFORM)/include/jemalloc/*.h)
+HEADERS_PLATFORM = \
+	$(wildcard $(PLATFORM)/include/jemalloc/*.h) \
+	$(wildcard $(PLATFORM)/include/jemalloc/internal/*.h)
+HEADERS_INTERNAL = \
+	$(wildcard include/jemalloc/internal/jemalloc*.h)
 SOURCES = \
 	src/arena.c \
 	src/background_thread.c \
@@ -116,7 +120,8 @@ SOURCES += \
 	src/zone.c
 endif
 
-HEADERS_INST := $(patsubst $(PLATFORM)/include/%,$(includedir)/%,$(HEADERS))
+HEADERS_INST := $(patsubst $(PLATFORM)/include/%,$(includedir)/%,$(HEADERS_PLATFORM))
+HEADERS_INST += $(patsubst include/%,$(includedir)/%,$(HEADERS_INTERNAL))
 OBJECTS := $(patsubst %.c,$(OBJ_DIR)/%.o,$(SOURCES))
 
 CFLAGS ?= -O2
@@ -133,13 +138,15 @@ endif
 
 all: $(OBJ_DIR)/$(LIB)
 
-$(includedir)/%.h: $(PLATFORM)/include/%.h
-	-@if [ ! -d $(includedir)/jemalloc ]; then mkdir -p $(includedir)/jemalloc; fi
+$(includedir)/%.h: $(PLATFORM)/include/%.h | $$(@D)/.
 	$(QUIET_INSTALL)cp $< $@
 	@chmod 0644 $@
 
-$(libdir)/%.a: $(OBJ_DIR)/%.a
-	-@if [ ! -d $(libdir)  ]; then mkdir -p $(libdir); fi
+$(includedir)/%.h: include/%.h | $$(@D)/.
+	$(QUIET_INSTALL)cp $< $@
+	@chmod 0644 $@
+
+$(libdir)/%.a: $(OBJ_DIR)/%.a | $$(@D)/.
 	$(QUIET_INSTALL)cp $< $@
 	@chmod 0644 $@
 
@@ -158,12 +165,24 @@ $(OBJ_DIR)/$(LIB): $(OBJECTS) | $$(@D)/.
 $(OBJ_DIR)/%.o: %.c $(OBJ_DIR)/.cflags | $$(@D)/.
 	$(QUIET_CC)$(CC) $(CFLAGS) -o $@ -c $<
 
-.PRECIOUS: $(OBJ_DIR)/. $(OBJ_DIR)%/.
+.PRECIOUS: $(OBJ_DIR)/. $(OBJ_DIR)%/. $(libdir)/. $(libdir)%/. $(includedir)/. $(includedir)%/.
 
 $(OBJ_DIR)/.:
 	$(QUIET)mkdir -p $@
 
 $(OBJ_DIR)%/.:
+	$(QUIET)mkdir -p $@
+
+$(libdir)/.:
+	$(QUIET)mkdir -p $@
+
+$(libdir)%/.:
+	$(QUIET)mkdir -p $@
+
+$(includedir)/.:
+	$(QUIET)mkdir -p $@
+
+$(includedir)%/.:
 	$(QUIET)mkdir -p $@
 
 TRACK_CFLAGS = $(subst ','\'',$(CC) $(CFLAGS))
