@@ -54,6 +54,7 @@ SOURCES = \
 	src/arena.c \
 	src/background_thread.c \
 	src/base.c \
+	src/batcher.c \
 	src/bin.c \
 	src/bin_info.c \
 	src/bitmap.c \
