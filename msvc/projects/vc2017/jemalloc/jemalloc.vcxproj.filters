@@ -298,9 +298,6 @@
     <ClInclude Include="..\..\..\..\include\jemalloc\internal\base.h">
       <Filter>Header Files\internal</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\jemalloc\internal\base_structs.h">
-      <Filter>Header Files\internal</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\include\jemalloc\internal\bin.h">
       <Filter>Header Files\internal</Filter>
     </ClInclude>
@@ -373,9 +370,6 @@
     <ClInclude Include="..\..\..\..\include\jemalloc\internal\extent_mmap.h">
       <Filter>Header Files\internal</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\jemalloc\internal\flat_bitmap.h">
-      <Filter>Header Files\internal</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\include\jemalloc\internal\fxp.h">
       <Filter>Header Files\internal</Filter>
     </ClInclude>
@@ -434,9 +428,6 @@
       <Filter>Header Files\internal</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\include\jemalloc\internal\mutex.h">
-      <Filter>Header Files\internal</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\include\jemalloc\internal\mutex_pool.h">
       <Filter>Header Files\internal</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\include\jemalloc\internal\mutex_prof.h">
