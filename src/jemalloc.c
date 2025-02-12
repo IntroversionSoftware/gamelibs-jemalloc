@@ -709,6 +709,7 @@ check_entry_exit_locking(tsdn_t *tsdn) {
  * Begin initialization functions.
  */
 
+#ifdef JEMALLOC_CONFIG_ENV
 static char *
 jemalloc_getenv(const char *name) {
 #ifdef JEMALLOC_FORCE_GETENV
@@ -726,6 +727,7 @@ jemalloc_getenv(const char *name) {
 #  endif
 #endif
 }
+#endif
 
 static unsigned
 malloc_ncpus(void) {
