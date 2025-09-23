@@ -11,7 +11,7 @@ c_flags += [
 ]
 
 incdirs = ['include']
-c_flags += ['-D_REENTRANT']
+c_flags += ['-fno-lto' '-D_REENTRANT']
 
 if target_machine.system() == 'windows'
     incdirs += ['mingw/include']

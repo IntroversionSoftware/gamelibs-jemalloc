@@ -126,7 +126,7 @@ HEADERS_INST += $(patsubst include/%,$(includedir)/%,$(HEADERS_INTERNAL))
 OBJECTS := $(patsubst %.c,$(OBJ_DIR)/%.o,$(SOURCES))
 
 CFLAGS ?= -O2
-CFLAGS += -DJEMALLOC_NO_PRIVATE_NAMESPACE -D_REENTRANT -I$(PLATFORM)/include -Iinclude
+CFLAGS += -fno-lto -DJEMALLOC_NO_PRIVATE_NAMESPACE -D_REENTRANT -I$(PLATFORM)/include -Iinclude
 
 ifeq ($(PLATFORM),mingw)
 CFLAGS += -D_WIN32
