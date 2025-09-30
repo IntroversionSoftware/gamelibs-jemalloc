@@ -135,6 +135,9 @@ ifeq ($(PLATFORM),linux)
 CFLAGS += -D_GNU_SOURCE
 endif
 
+# Need to remove -fwhole-program-vtables because it depends on -flto
+CFLAGS := $(filter-out -flto -fwhole-program-vtables,$(CFLAGS))
+
 .PHONY: install
 
 all: $(OBJ_DIR)/$(LIB)
