@@ -54,7 +54,6 @@ SOURCES = \
 	src/arena.c \
 	src/background_thread.c \
 	src/base.c \
-	src/batcher.c \
 	src/bin.c \
 	src/bin_info.c \
 	src/bitmap.c \
@@ -91,7 +90,6 @@ SOURCES = \
 	src/pa_extra.c \
 	src/pac.c \
 	src/pages.c \
-	src/pai.c \
 	src/peak_event.c \
 	src/prof.c \
 	src/prof_data.c \
