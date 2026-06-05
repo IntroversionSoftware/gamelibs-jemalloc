@@ -1,24 +1,24 @@
 /* include/jemalloc/jemalloc_defs.h.  Generated from jemalloc_defs.h.in by configure.  */
 /* Defined if __attribute__((...)) syntax is supported. */
-#define JEMALLOC_HAVE_ATTR 
+#define JEMALLOC_HAVE_ATTR
 
 /* Defined if alloc_size attribute is supported. */
-#define JEMALLOC_HAVE_ATTR_ALLOC_SIZE 
+#define JEMALLOC_HAVE_ATTR_ALLOC_SIZE
 
 /* Defined if format_arg(...) attribute is supported. */
-#define JEMALLOC_HAVE_ATTR_FORMAT_ARG 
+#define JEMALLOC_HAVE_ATTR_FORMAT_ARG
 
 /* Defined if format(gnu_printf, ...) attribute is supported. */
 /* #undef JEMALLOC_HAVE_ATTR_FORMAT_GNU_PRINTF */
 
 /* Defined if format(printf, ...) attribute is supported. */
-#define JEMALLOC_HAVE_ATTR_FORMAT_PRINTF 
+#define JEMALLOC_HAVE_ATTR_FORMAT_PRINTF
 
 /* Defined if fallthrough attribute is supported. */
-#define JEMALLOC_HAVE_ATTR_FALLTHROUGH 
+#define JEMALLOC_HAVE_ATTR_FALLTHROUGH
 
 /* Defined if cold attribute is supported. */
-#define JEMALLOC_HAVE_ATTR_COLD 
+#define JEMALLOC_HAVE_ATTR_COLD
 
 /* Defined if deprecated attribute is supported. */
 #define JEMALLOC_HAVE_ATTR_DEPRECATED
@@ -28,7 +28,7 @@
  * present on the system.
  */
 /* #undef JEMALLOC_OVERRIDE_MEMALIGN */
-#define JEMALLOC_OVERRIDE_VALLOC 
+#define JEMALLOC_OVERRIDE_VALLOC
 /* #undef JEMALLOC_OVERRIDE_PVALLOC */
 
 /*
@@ -46,6 +46,12 @@
  * glibc defines.
  */
 /* #undef JEMALLOC_USE_CXX_THROW */
+
+/*
+ * If undefined, disables reading configuration from environment variable or file
+ */
+#define JEMALLOC_CONFIG_ENV
+#define JEMALLOC_CONFIG_FILE
 
 #ifdef _MSC_VER
 #  ifdef _WIN64

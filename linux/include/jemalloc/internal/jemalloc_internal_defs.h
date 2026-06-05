@@ -130,6 +130,11 @@
 #define JEMALLOC_HAVE_CLOCK_REALTIME
 
 /*
+ * Defined if clock_gettime_nsec_np(CLOCK_UPTIME_RAW) is available.
+ */
+/* #undef JEMALLOC_HAVE_CLOCK_GETTIME_NSEC_NP */
+
+/*
  * Defined if _malloc_thread_cleanup() exists.  At least in the case of
  * FreeBSD, pthread_key_create() allocates, which if used during malloc
  * bootstrapping will cause recursion into the pthreads library.  Therefore, if
@@ -178,6 +183,9 @@
 
 /* Use gcc intrinsics for profile backtracing if defined. */
 /* #undef JEMALLOC_PROF_GCC */
+
+/* Use frame pointer for profile backtracing if defined. Linux only. */
+/* #undef JEMALLOC_PROF_FRAME_POINTER */
 
 /* JEMALLOC_PAGEID enabled page id */
 /* #undef JEMALLOC_PAGEID */
@@ -279,7 +287,7 @@
  * If defined, explicitly attempt to more uniformly distribute large allocation
  * pointer alignments across all cache indices.
  */
-/* #undef JEMALLOC_CACHE_OBLIVIOUS */
+#define JEMALLOC_CACHE_OBLIVIOUS
 
 /*
  * If defined, enable logging facilities.  We make this a configure option to
@@ -323,6 +331,13 @@
 #define JEMALLOC_HAVE_MADVISE_HUGE
 
 /*
+ * Defined if best-effort synchronous collapse of the native
+ * pages mapped by the memory range into transparent huge pages is supported
+ * via MADV_COLLAPSE arguments to madvise(2).
+ */
+/* #undef JEMALLOC_HAVE_MADVISE_COLLAPSE */
+
+/*
  * Methods for purging unused pages differ between operating systems.
  *
  *   madvise(..., MADV_FREE) : This marks pages as being unused, such that they
@@ -352,8 +367,22 @@
  */
 /* #undef JEMALLOC_MADVISE_NOCORE */
 
+/* Defined if process_madvise(2) is available. */
+/* #undef JEMALLOC_HAVE_PROCESS_MADVISE */
+
+/* #undef EXPERIMENTAL_SYS_PROCESS_MADVISE_NR */
+
 /* Defined if mprotect(2) is available. */
 #define JEMALLOC_HAVE_MPROTECT
+
+/* Defined if sys/sdt.h is available and sdt tracing enabled */
+/* #undef JEMALLOC_EXPERIMENTAL_USDT_STAP */
+
+/*
+ * Defined if sys/sdt.h is unavailable, sdt tracing enabled, and
+ * platform is supported
+ */
+/* #undef JEMALLOC_EXPERIMENTAL_USDT_CUSTOM */
 
 /*
  * Defined if transparent huge pages (THPs) are supported via the
@@ -422,6 +451,9 @@
 /* Adaptive mutex support in pthreads. */
 #define JEMALLOC_HAVE_PTHREAD_MUTEX_ADAPTIVE_NP
 
+/* gettid() support */
+#define JEMALLOC_HAVE_GETTID
+
 /* GNU specific sched_getcpu support */
 #define JEMALLOC_HAVE_SCHED_GETCPU
 
@@ -459,6 +491,9 @@
 /* Is C++ support being built? */
 #define JEMALLOC_ENABLE_CXX
 
+/* Are C++ exceptions enabled? */
+/* #undef JEMALLOC_HAVE_CXX_EXCEPTIONS */
+
 /* Performs additional size checks when defined. */
 /* #undef JEMALLOC_OPT_SIZE_CHECKS */
 
@@ -478,7 +513,10 @@
  * If defined, support the use of rdtscp to get the time stamp counter
  * and the processor ID.
  */
-/* #undef JEMALLOC_HAVE_RDTSCP */
+#define JEMALLOC_HAVE_RDTSCP
+
+/* If defined, use __int128 for optimization. */
+#define JEMALLOC_HAVE_INT128
 
 #include "jemalloc/internal/jemalloc_internal_overrides.h"
 

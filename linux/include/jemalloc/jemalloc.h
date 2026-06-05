@@ -1,8 +1,6 @@
 #ifndef JEMALLOC_H_
 #define JEMALLOC_H_
-#ifdef __cplusplus
-extern "C" {
-#endif
+#pragma GCC system_header
 
 /* Defined if __attribute__((...)) syntax is supported. */
 #define JEMALLOC_HAVE_ATTR
@@ -54,6 +52,12 @@ extern "C" {
  */
 #define JEMALLOC_USE_CXX_THROW
 
+/*
+ * If undefined, disables reading configuration from environment variable or file
+ */
+#define JEMALLOC_CONFIG_ENV
+#define JEMALLOC_CONFIG_FILE
+
 #ifdef _MSC_VER
 #  ifdef _WIN64
 #    define LG_SIZEOF_PTR_WIN 3
@@ -91,7 +95,7 @@ extern "C" {
 #  define je_malloc_stats_print je_malloc_stats_print
 #  define je_malloc_usable_size je_malloc_usable_size
 #  define je_mallocx je_mallocx
-#  define je_smallocx_4ba0ac7d41eb31feff06f62fd668b21240911a39 je_smallocx_4ba0ac7d41eb31feff06f62fd668b21240911a39
+#  define je_smallocx_404c67458a9e9eb37655287770c923cb553a0922 je_smallocx_404c67458a9e9eb37655287770c923cb553a0922
 #  define je_nallocx je_nallocx
 #  define je_posix_memalign je_posix_memalign
 #  define je_rallocx je_rallocx
@@ -110,13 +114,13 @@ extern "C" {
 #include <limits.h>
 #include <strings.h>
 
-#define JEMALLOC_VERSION "5.3.0-135-g4ba0ac7d41eb31feff06f62fd668b21240911a39"
+#define JEMALLOC_VERSION "5.3.0-485-g404c67458a9e9eb37655287770c923cb553a0922"
 #define JEMALLOC_VERSION_MAJOR 5
 #define JEMALLOC_VERSION_MINOR 3
 #define JEMALLOC_VERSION_BUGFIX 0
-#define JEMALLOC_VERSION_NREV 135
-#define JEMALLOC_VERSION_GID "4ba0ac7d41eb31feff06f62fd668b21240911a39"
-#define JEMALLOC_VERSION_GID_IDENT 4ba0ac7d41eb31feff06f62fd668b21240911a39
+#define JEMALLOC_VERSION_NREV 485
+#define JEMALLOC_VERSION_GID "404c67458a9e9eb37655287770c923cb553a0922"
+#define JEMALLOC_VERSION_GID_IDENT 404c67458a9e9eb37655287770c923cb553a0922
 
 #define MALLOCX_LG_ALIGN(la)	((int)(la))
 #if LG_SIZEOF_PTR == 2
@@ -158,7 +162,7 @@ extern "C" {
 #define MALLCTL_ARENAS_DESTROYED	4097
 
 #if defined(__cplusplus) && defined(JEMALLOC_USE_CXX_THROW)
-#  define JEMALLOC_CXX_THROW noexcept
+#  define JEMALLOC_CXX_THROW noexcept (true)
 #else
 #  define JEMALLOC_CXX_THROW
 #endif
@@ -266,6 +270,10 @@ extern "C" {
  * of namespace management, and should be omitted in application code unless
  * JEMALLOC_NO_DEMANGLE is defined (see jemalloc_mangle.h).
  */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern JEMALLOC_EXPORT const char	*je_malloc_conf;
 extern JEMALLOC_EXPORT const char	*je_malloc_conf_2_conf_harder;
 extern JEMALLOC_EXPORT void		(*je_malloc_message)(void *cbopaque,
@@ -343,7 +351,45 @@ JEMALLOC_EXPORT JEMALLOC_ALLOCATOR JEMALLOC_RESTRICT_RETURN
     JEMALLOC_ATTR(malloc);
 #endif
 
+#ifdef __cplusplus
+}
+#endif
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct extent_hooks_s extent_hooks_t;
+
+/*
+ * Extent alloc flags.  A custom extent_alloc hook may OR these into the
+ * returned pointer; jemalloc strips the low bits before use.  Safe because
+ * returned addresses are at least page-aligned (PAGE >= 256).
+ *
+ * EXTENT_ALLOC_FLAG_PINNED: backing memory is non-reclaimable.
+ * Pinned extents are excluded from decay/purging and cached separately for
+ * preferential reuse.  A hook returning this flag must also set *commit to
+ * true: pinned memory bypasses jemalloc's commit/decommit machinery.
+ *
+ * The pinned attribute is per-extent: a single hook may return pinned and
+ * non-pinned extents in different calls.  Pinned and non-pinned extents are
+ * never merged together (the merge would change the reclamation policy of
+ * one half), so pinned-ness is set at allocation and inherited through
+ * splits, but never changes after that.
+ *
+ * Example (HugeTLB alloc hook):
+ *   void *my_alloc(extent_hooks_t *h, void *new_addr, size_t size,
+ *       size_t alignment, bool *zero, bool *commit, unsigned arena_ind) {
+ *       void *addr = mmap(NULL, size, PROT_READ|PROT_WRITE,
+ *           MAP_PRIVATE|MAP_ANONYMOUS|MAP_HUGETLB, -1, 0);
+ *       if (addr == MAP_FAILED) return NULL;
+ *       *zero = true;
+ *       *commit = true;
+ *       return (void *)((uintptr_t)addr | EXTENT_ALLOC_FLAG_PINNED);
+ *   }
+ */
+#define EXTENT_ALLOC_FLAG_PINNED    0x1U
+#define EXTENT_ALLOC_FLAG_MASK      0xFFU
 
 /*
  * void *
@@ -421,6 +467,10 @@ struct extent_hooks_s {
 	extent_merge_t		*merge;
 };
 
+#ifdef __cplusplus
+}
+#endif
+
 /*
  * By default application code must explicitly refer to mangled symbol names,
  * so that it is possible to use jemalloc in conjunction with another allocator
@@ -448,7 +498,7 @@ struct extent_hooks_s {
 #  define malloc_stats_print je_malloc_stats_print
 #  define malloc_usable_size je_malloc_usable_size
 #  define mallocx je_mallocx
-#  define smallocx_4ba0ac7d41eb31feff06f62fd668b21240911a39 je_smallocx_4ba0ac7d41eb31feff06f62fd668b21240911a39
+#  define smallocx_404c67458a9e9eb37655287770c923cb553a0922 je_smallocx_404c67458a9e9eb37655287770c923cb553a0922
 #  define nallocx je_nallocx
 #  define posix_memalign je_posix_memalign
 #  define rallocx je_rallocx
@@ -485,7 +535,7 @@ struct extent_hooks_s {
 #  undef je_malloc_stats_print
 #  undef je_malloc_usable_size
 #  undef je_mallocx
-#  undef je_smallocx_4ba0ac7d41eb31feff06f62fd668b21240911a39
+#  undef je_smallocx_404c67458a9e9eb37655287770c923cb553a0922
 #  undef je_nallocx
 #  undef je_posix_memalign
 #  undef je_rallocx
@@ -498,7 +548,4 @@ struct extent_hooks_s {
 #  undef je_pvalloc
 #endif
 
-#ifdef __cplusplus
-}
-#endif
 #endif /* JEMALLOC_H_ */

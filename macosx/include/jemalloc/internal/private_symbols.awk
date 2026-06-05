@@ -19,7 +19,7 @@ BEGIN {
         _je_malloc_stats_print \
         _je_malloc_usable_size \
         _je_mallocx \
-        _je_smallocx_4ba0ac7d41eb31feff06f62fd668b21240911a39 \
+        _je_smallocx_b68b123dc5939c5b33313b4c3e31f9e692ebe03c \
         _je_nallocx \
         _je_posix_memalign \
         _je_rallocx \
