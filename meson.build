@@ -29,6 +29,7 @@ endif
 
 sources = [
     'src/arena.c',
+    'src/arenas_management.c',
     'src/background_thread.c',
     'src/base.c',
     'src/bin.c',
